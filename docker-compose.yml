@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  postgres_db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: odoo
+    volumes:
+      - workdata_postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgAdmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - 5050:80
+    volumes:
+      - pg_admin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres_db
+
+  odoo:
+    image: odoo:11    
+    environment:
+      - HOST=postgres_db
+      - USER=odoo
+      - PASSWORD=postgres    
+    ports:
+      - "8069:8069"
+    depends_on:
+      - postgres_db
+
+volumes:
+  workdata_postgres:
+  pg_admin_data:
