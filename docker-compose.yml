@@ -35,7 +35,11 @@ services:
       - "8069:8069"
     depends_on:
       - postgres_db
+    volumes:
+      - odoo_data:/var/lib/odoo
+      - /home/maddrum/Documents/work_data/volume_extra_addons/:/mnt/extra-addons
 
 volumes:
   workdata_postgres:
   pg_admin_data:
+  odoo_data:
